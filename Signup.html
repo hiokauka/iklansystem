@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teroka</title>
+
+  <link rel="icon" type="image/png" href="assets/images/logo.svg">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body.home {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f4f7fb;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-container {
+      text-align: center;
+    }
+
+    .btn-custom {
+      padding: 14px 35px;
+      border-radius: 10px;
+      border: none;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 12px;
+      transition: 0.2s;
+    }
+
+    /* Light Blue Button (User) */
+    .user-btn {
+      background-color: #9fd7ff;
+      color: #003d66;
+    }
+
+    /* Dark Blue Button (Advertiser) */
+    .advertiser-btn {
+      background-color: #004b9e;
+      color: white;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-3px);
+      opacity: 0.92;
+    }
+  </style>
+</head>
+
+<body class="home">
+  <div class="btn-container">
+    <button class="btn-custom user-btn" onclick="location.href='/signup-user.html'">
+      User
+    </button>
+
+    <br>
+
+    <button class="btn-custom advertiser-btn" onclick="location.href='/signup-advertiser.html'">
+      Advertiser
+    </button>
+  </div>
+</body>
+</html>

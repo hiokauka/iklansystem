@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teroka</title>
+
+  <link rel="icon" type="image/png" href="assets/images/logo.svg">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/home.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <!-- Optional Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    body.home {
+      background: #f5f7fa;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Center Card */
+    .card {
+      border-radius: 16px;
+      border: none;
+      width: 380px;
+    }
+
+    /* Heading */
+    .card h2 {
+      font-weight: 600;
+      font-size: 1.4rem;
+    }
+
+    /* Inputs */
+    .form-control {
+      height: 48px;
+      border-radius: 10px;
+      border: 1px solid #d9d9d9;
+      padding-left: 14px;
+      transition: 0.25s;
+    }
+
+    .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+    }
+
+    /* Button */
+    .btn-primary {
+      height: 48px;
+      border-radius: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      background: #007bff;
+      border: none;
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #0056d2;
+    }
+
+    /* Text + Link */
+    p a {
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body class="home">
+  <div class="d-flex min-vh-100 justify-content-center align-items-start bg-light py-5">
+    <div class="card shadow-lg p-4">
+
+      <h2 class="text-center mb-4">Cipta Akaun</h2>
+      <h3 style=" font-size: 1rem; color: red; font-style: bold;">Sila guna huruf kecil sahaja untuk username</h3>
+
+      <form id="signupForm" class="d-flex flex-column gap-3">
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" id="username" placeholder="Masukkan Username" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="Name" class="form-label">Nama</label>
+          <input type="text" id="Name" placeholder="Masukkan nama penuh anda" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Kata laluan</label>
+          <input type="password" id="password" placeholder="Masukkan kata laluan" class="form-control" />
+          <h3 style=" font-size: 1rem; color: red; font-style: bold;">Sila gunakan kata laluan yang mudah untuk dingati!</h3>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Pengesahan kata laluan</label>
+          <input type="password" id="confirmPassword" placeholder="Sahkan kata laluan anda" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="numbertelephone" class="form-label">Nombor Telefon</label>
+          <input type="text" id="numbertelephone" placeholder="Masukkan nombor telefon anda" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="Banknum" class="form-label">Nombor Bank</label>
+          <input type="text" id="Banknum" placeholder="Masukkan nombor Bank anda" class="form-control" />
+        </div>
+
+
+        <div class="form-group">
+          <label for="bankname" class="form-label">Nama Bank</label>
+          <input type="text" id="bankname" placeholder="Masukkan nama Bank anda" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="pin" class="form-label">Pin</label>
+          <input type="text" id="pin" placeholder="Masukkan pin anda" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="referral" class="form-label">Referral</label>
+          <input type="text" id="referral" placeholder="Masukkan nombor referral anda" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">
+          Cipta Akaun
+        </button>
+      </form>
+
+      <p class="text-center mt-3 mb-0">
+        Dah ada akaun?
+        <a href="/login.html" class="text-primary">Log Masuk</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from '/supabase.js';
+
+    const form = document.getElementById('signupForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim().toLowerCase();
+      const name = document.getElementById('Name').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const number_telephone = document.getElementById('numbertelephone').value;
+      const bank_num = document.getElementById('Banknum').value;
+      const bank_name = document.getElementById('bankname').value;
+      const pin = document.getElementById('pin').value;
+      let referral = document.getElementById('referral').value;
+
+      if (password !== confirmPassword) {
+        alert('Pengesahan kata laluan tidak sama!');
+        return;
+      }
+
+      // 1. Validate PIN
+      const { data: pinData, error: pinErr } = await supabase
+        .from('pins')
+        .select('*')
+        .eq('pin_code', pin)
+        .eq('status', 'unused')
+        .single();
+
+      if (pinErr || !pinData) {
+        alert('❌ Pin tidak sah atau sudah digunakan.');
+        return;
+      }
+
+      await supabase
+        .from('pins')
+        .update({ status: 'used', used_by: username, used_at: new Date() })
+        .eq('pin_code', pin);
+
+
+      // 2. Validate referral (must exist and be used before)
+      if (referral && referral.trim() !== "") {
+        const { data: refData, error: refErr } = await supabase
+          .from('pins')
+          .select('*')
+          .eq('pin_code', referral)
+          .eq('status', 'used');
+
+        if (refErr || !refData || refData.length === 0) {
+          alert('❌ Referral tidak sah atau belum aktif.');
+          return;
+        }
+      } else {
+        // If no referral, set referral = null or "-"
+        referral = null;
+      }
+
+      // 3. Create User + give starting bonus
+      const { data: userData, error: userErr } = await supabase
+        .from('users')
+        .insert([
+          {
+            username,
+            name,
+            password,
+            number_telephone,
+            bank_num,
+            bank_name,
+            pin,
+            referral,  // <-- now can be NULL
+            bonus: 0,
+            click_bonus: 0,
+            click_count: 0
+          }
+        ])
+        .select()
+        .single();
+
+      if (userErr) {
+        alert('Ralat semasa mendaftar pengguna.');
+        console.error(userErr);
+        return;
+      }
+
+      // 4. Mark PIN as used
+      await supabase
+        .from('pins')
+        .update({ status: 'used', used_by: username, used_at: new Date() })
+        .eq('pin_code', pin);
+
+      
+      alert('✅ Akaun berjaya dicipta!');
+      window.location.href = '/login.html';
+    });
+  </script>
+
+</body>
+
+</html>

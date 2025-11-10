@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdSpace</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #1a093c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            flex-wrap: wrap;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        nav a {
+            font-size: 20px;
+            padding: 10px 0;
+            display: block;
+        }
+
+        /* Title styling */
+        .title {
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-top: 15px;
+            margin-left: 450px;
+            /* Adjusted in media queries */
+        }
+
+        /* Buttons */
+        button {
+            padding: 5px 10px;
+            background-color: #1a093c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-navbar {
+            font-size: 24px;
+            background: none;
+            border: white solid 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .card-img-top {
+            width: 100%;
+            /* full width of the card */
+            height: 200px;
+            /* fixed height */
+            object-fit: cover;
+            /* maintain aspect ratio, crop if needed */
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        /* ===== Responsive adjustments ===== */
+        @media (max-width: 1200px) {
+            .title {
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .title {
+                font-size: 1.8rem;
+            }
+
+            nav a {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .btn-navbar {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.4rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .btn-navbar {
+                font-size: 18px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+
+    <script>
+        // Check if the user is logged in
+        const isLoggedIn = localStorage.getItem('userLoggedIn')
+        if (!isLoggedIn) {
+            // Redirect to login page if not logged in
+            window.location.href = '/index.html'
+        }
+    </script>
+
+    <!-- Header -->
+    <header class="mb-4 p-3  shadow-sm d-flex flex-column flex-md-row ">
+        <div class="flex-md-row d-flex align-items-center gap-3">
+            <button class="btn-navbar" id="toggleSidebar">☰</button>
+            <h1 class=" title"> Hub Pengiklanan Digital</h1>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="btn-close mb-3" id="closeSidebar"></button>
+        <nav class="d-flex flex-column my-4">
+            <a href="/User/Uhome.html" class="mb-2 text-decoration-none text-dark">Laman Utama</a>
+            <a href="/User/Bonus.html" class="mb-2 text-decoration-none text-dark">Bonus</a>
+            <a href="/User/Network.html" class="mb-2 text-decoration-none text-dark">Rangkaian</a>
+            <a href="/User/Profile.html" class="mb-2 text-decoration-none text-dark">Profile</a>
+            <a href="#" id="logoutLink" class="mb-2 text-decoration-none" style="color: red;">Log Keluar</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-4">
+        <div class="row g-4" id="adsContainer">
+            <!-- Ads will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Ad Modal -->
+    <div class="modal fade" id="adModal1" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAdTitle">Title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalAdImage" src="/assets/images/image.png" alt="Ad Image"
+                        class="img-fluid rounded mb-3" />
+                    <p class="text-primary fw-bold" id="modalAdPrice">RM0</p>
+                    <p id="modalAdDescription">Description</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="adModal2" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ad Title 2</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="https://via.placeholder.com/400x250" alt="Ad 2" class="img-fluid rounded mb-3" />
+                    <p class="text-primary fw-bold">$70</p>
+                    <p>Description for Ad 2 goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 text-center text-muted">
+        © 2025 AdSpace. All rights reserved.
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.style.display = 'block';
+        });
+        closeBtn.addEventListener('click', () => {
+            sidebar.style.display = 'none';
+        });
+    </script>
+
+
+    <script>
+        const logoutLink = document.getElementById('logoutLink');
+
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Show confirmation dialog
+            const confirmed = confirm("Adakah anda pasti mahu log keluar?");
+            if (!confirmed) return; // Stop if user cancels
+
+            // Clear localStorage login flags
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('username');
+
+            // Redirect to login page
+            window.location.href = '/index.html';
+        });
+    </script>
+
+    <script type="module">
+        import { supabase } from '/supabase.js';
+
+        async function loadAds() {
+            const container = document.getElementById("adsContainer");
+
+            // Fetch all ads
+            const { data: ads, error } = await supabase
+                .from("adverts")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.error("Error fetching ads:", error);
+                return;
+            }
+
+            container.innerHTML = "";
+
+            ads.forEach(ad => {
+                const card = `
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card h-100 ad-card shadow-sm">
+                        <img src="${ad.image_url || '/assets/images/image.png'}" class="card-img-top" alt="${ad.title}" />
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${ad.title}</h5>
+                            <p class="text-primary fw-bold">RM ${ad.price}</p>
+                            <div class="button-group">
+                                <button class="btn btn-primary mt-auto" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#adModal1"
+                                        data-title="${ad.title}"
+                                        data-description="${ad.description}"
+                                        data-price="${ad.price}"
+                                        data-image="${ad.image_url}">
+                                    Lihat Butiran
+                                </button>   
+                                <button class="btn btn-success click-btn">Click</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.innerHTML += card;
+            });
+
+            attachModalEvents();
+        }
+
+        // Attach modal population events
+        function attachModalEvents() {
+            document.querySelectorAll("#adsContainer .btn-primary").forEach(btn => {
+                btn.addEventListener("click", e => {
+                    const button = e.currentTarget;
+                    const title = button.dataset.title;
+                    const description = button.dataset.description;
+                    const price = button.dataset.price;
+                    const image = button.dataset.image;
+
+                    document.getElementById("modalAdTitle").innerText = title;
+                    document.getElementById("modalAdDescription").innerText = description;
+                    document.getElementById("modalAdPrice").innerText = "RM " + price;
+                    document.getElementById("modalAdImage").src = image || "/assets/images/image.png";
+                });
+            });
+        }
+
+
+        function attachClickEvents() {
+            document.querySelectorAll(".click-btn").forEach(btn => {
+                btn.addEventListener("click", async () => {
+
+                    const username = localStorage.getItem("username");
+                    if (!username) {
+                        window.location.href = "/index.html";
+                        return;
+                    }
+
+                    // 1. Fetch user click + bonus info
+                    const { data: user, error: fetchErr } = await supabase
+                        .from("users")
+                        .select("click_count, daily_click_count, last_click_date, bonus, click_bonus, maximumclickperday")
+                        .eq("username", username)
+                        .single();
+
+                    if (fetchErr || !user) {
+                        console.error("Couldn't fetch user:", fetchErr);
+                        return;
+                    }
+
+                    const today = new Date().toISOString().split("T")[0];
+                    let dailyClicks = user.daily_click_count || 0;
+                    let max = parseInt(user.maximumclickperday, 10) || 0;
+
+                    // Reset daily count if it's a new day
+                    if ((user.last_click_date?.split("T")[0] || null) !== today) {
+                        dailyClicks = 0;
+                    }
+
+                    // 🚫 Check total earned money limit
+                    if ((user.click_bonus || 0) >= 120) {
+                        alert("🚫 You have reached the maximum earning from clicks (RM 120). Cannot click anymore.");
+                        btn.disabled = true;
+                        return;
+                    }
+
+                    // Check daily limit
+                    if (dailyClicks >= max) {
+                        alert(`🚫 You reached your daily click limit of ${max}. Try again tomorrow.`);
+                        return;
+                    }
+
+                    // Calculate new values
+                    const newTotalClicks = (user.click_count || 0) + 1;
+                    const newDailyClicks = dailyClicks + 1;
+                    const earnedFromClick = 1; // RM per click
+                    const newClickBonus = (user.click_bonus || 0) + earnedFromClick;
+                    const newTotalBonus = (user.bonus || 0) + earnedFromClick; // total includes clicks + MLM
+                    // Update DB
+                    const { error: updateErr } = await supabase
+                        .from("users")
+                        .update({
+                            click_count: newTotalClicks,
+                            daily_click_count: newDailyClicks,
+                            last_click_date: today,
+                            bonus: newTotalBonus,      // total including click + MLM
+                            click_bonus: newClickBonus  // click-specific bonus
+                        })
+                        .eq("username", username);
+
+                    if (updateErr) {
+                        console.error("Failed to update:", updateErr);
+                    } else {
+                        alert(`✅ Berjaya! Klik hari ini: ${newDailyClicks}/${max}, Total bonus: RM ${newTotalBonus}`);
+
+                        // Disable button if total bonus reached 120
+                        if (newBonus >= 120) {
+                            btn.disabled = true;
+                        }
+                    }
+
+                });
+            });
+        }
+
+
+
+
+        loadAds().then(() => {
+            attachClickEvents(); // <-- Attach click events AFTER ads are loaded
+        });
+    </script>
+
+</body>
+
+</html>

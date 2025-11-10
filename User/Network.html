@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rangkaian Downline | AdSpace</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Montserrat", sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1a093c;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 10px 15px;
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: #ffffff;
+      margin-top: 15px;
+      margin-left: 450px;
+      /* Will adjust in media queries */
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      z-index: 1050;
+      overflow-y: auto;
+    }
+
+    /* Navigation links */
+    nav a {
+      font-size: 20px;
+      padding: 10px 0;
+      display: block;
+    }
+
+    /* Buttons */
+    button {
+      padding: 5px 10px;
+      background-color: #1a093c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0b5ed7;
+    }
+
+    .btn-navbar {
+      font-size: 24px;
+      background: none;
+      border: white solid 2px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+
+    /* Table styling */
+    .tablecard {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: center;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    th {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    /* Form elements */
+    .container {
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 500;
+      margin-right: 10px;
+    }
+
+    select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1px solid #ced4da;
+    }
+
+    /* ===== Responsive adjustments ===== */
+    @media (max-width: 1200px) {
+      .title {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .title {
+        font-size: 1.8rem;
+      }
+
+      nav a {
+        font-size: 18px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 5px 8px;
+      }
+
+      select {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 1.6rem;
+      }
+
+      .btn-navbar {
+        font-size: 20px;
+      }
+
+      .sidebar {
+        width: 200px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.4rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-navbar {
+        font-size: 18px;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <script>
+    // Check if the user is logged in
+    const isLoggedIn = localStorage.getItem('userLoggedIn')
+    if (!isLoggedIn) {
+      // Redirect to login page if not logged in
+      window.location.href = '/index.html'
+    }
+  </script>
+
+
+  <header class="mb-4 p-3 shadow-sm d-flex flex-column flex-md-row ">
+    <div class="d-flex flex-row align-items-center">
+      <button class="btn-navbar" id="toggleSidebar">☰</button>
+      <h1 class=" title">Hub Pengiklanan Digital</h1>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <button class="btn-close mb-3" id="closeSidebar"></button>
+    <nav class="d-flex flex-column my-4">
+      <a href="/User/Uhome.html" class="mb-2 text-decoration-none text-dark">Laman Utama</a>
+      <a href="/User/Bonus.html" class="mb-2 text-decoration-none text-dark">Bonus</a>
+      <a href="/User/Network.html" class="mb-2 text-decoration-none text-dark">Rangkaian</a>
+      <a href="/User/Profile.html" class="mb-2 text-decoration-none text-dark">Profile</a>
+      <a href="#" id="logoutLink" class="mb-2 text-decoration-none" style="color: red;">Log Keluar</a>
+    </nav>
+  </div>
+
+
+  <div class="container">
+    <label for="level">Pilih Level Downline:</label>
+    <select id="level">
+      <option value="1">Level 1</option>
+      <option value="2">Level 2</option>
+      <option value="3">Level 3</option>
+      <option value="4">Level 4</option>
+      <option value="5">Level 5</option>
+      <option value="6">Level 6</option>
+      <option value="7">Level 7</option>
+      <option value="8">Level 8</option>
+      <option value="9">Level 9</option>
+      <option value="10">Level 10</option>
+
+    </select>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablecontainer">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Date Joined</th>
+            <th>Bonus (RM)</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.style.display = 'block';
+    });
+    closeBtn.addEventListener('click', () => {
+      sidebar.style.display = 'none';
+    });
+  </script>
+
+  <script>
+    const logoutLink = document.getElementById('logoutLink');
+
+    logoutLink.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Show confirmation dialog
+      const confirmed = confirm("Adakah anda pasti mahu log keluar?");
+      if (!confirmed) return; // Stop if user cancels
+
+      // Clear localStorage login flags
+      localStorage.removeItem('userLoggedIn');
+      localStorage.removeItem('username');
+
+      // Redirect to login page
+      window.location.href = '/index.html';
+    });
+  </script>
+
+    <script type="module">
+      import { supabase } from '/supabase.js';
+
+      const levelRequirements = [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8];
+      const levelBonuses = [0, 3, 2, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5];
+
+      const userTableBody = document.querySelector('table tbody');
+      const levelSelect = document.getElementById('level');
+
+      let sponsoredCount = 0;
+
+      const fetchDownline = async (requestedLevel) => {
+        const loggedInUser = localStorage.getItem("username");
+        if (!loggedInUser) return;
+
+        userTableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+
+        // Fetch logged-in user
+        const { data: user, error: userError } = await supabase
+          .from("users")
+          .select("pin, name, bonus, bonus_levels")
+          .eq("username", loggedInUser)
+          .single();
+
+        if (userError || !user) {
+          console.error("Error fetching user:", userError);
+          userTableBody.innerHTML = '<tr><td colspan="5">Error loading data</td></tr>';
+          return;
+        }
+
+        // Count direct sponsors
+        const { data: sponsoredUsers } = await supabase
+          .from("users")
+          .select("username, pin")
+          .eq("referral", user.pin);
+
+        sponsoredCount = sponsoredUsers?.length || 0;
+        updateLevelOptions(sponsoredCount);
+
+        const maxLevel = Math.min(requestedLevel, sponsoredCount);
+        if (maxLevel === 0) {
+          userTableBody.innerHTML = '<tr><td colspan="5">Not enough sponsored users for any level</td></tr>';
+          return;
+        }
+
+        let currentLevelPins = [user.pin];
+        let downline = [];
+
+        for (let i = 0; i < maxLevel; i++) {
+          if (currentLevelPins.length === 0) break;
+
+          const { data, error } = await supabase
+            .from("users")
+            .select("name, username, number_telephone, created_at, pin")
+            .in("referral", currentLevelPins);
+
+          if (error || !data || data.length === 0) {
+            downline = [];
+            break;
+          }
+
+          downline = data;
+          currentLevelPins = downline.map(u => u.pin);
+        }
+
+        // Give bonus to the logged-in user (the referrer) **once per level**
+        const userBonusLevels = user.bonus_levels || {};
+        if (!userBonusLevels[maxLevel]) {
+          const newBonus = (parseFloat(user.bonus) || 0) + levelBonuses[maxLevel];
+          userBonusLevels[maxLevel] = true;
+
+          await supabase
+            .from("users")
+            .update({ bonus: newBonus, bonus_levels: userBonusLevels })
+            .eq("pin", user.pin);
+        }
+
+        renderTable(downline, maxLevel, user);
+      };
+
+      const renderTable = (downline, level, user) => {
+        if (!downline || downline.length === 0) {
+          userTableBody.innerHTML = '<tr><td colspan="5">No downline found</td></tr>';
+          return;
+        }
+
+        const bonus = levelBonuses[level] || 0;
+
+        userTableBody.innerHTML = downline.map(u => `
+      <tr>
+        <td>${u.name}</td>
+        <td>${u.username}</td>
+        <td>${u.number_telephone || '-'}</td>
+        <td>${new Date(u.created_at).toLocaleDateString()}</td>
+        <td>${bonus}</td>
+      </tr>
+    `).join('');
+      };
+
+      const updateLevelOptions = (sCount) => {
+        Array.from(levelSelect.options).forEach(option => {
+          const level = parseInt(option.value);
+          option.disabled = level > sCount;
+        });
+
+        if (parseInt(levelSelect.value) > sCount) {
+          levelSelect.value = sCount > 0 ? sCount : 1;
+        }
+      };
+
+      levelSelect.addEventListener('change', () => {
+        fetchDownline(parseInt(levelSelect.value));
+      });
+
+      // Initial load
+      (async () => {
+        const loggedInUser = localStorage.getItem("username");
+        if (!loggedInUser) return;
+
+        const { data: sponsoredUsers } = await supabase
+          .from("users")
+          .select("username, pin")
+          .eq("referral", loggedInUser);
+
+        sponsoredCount = sponsoredUsers?.length || 0;
+        updateLevelOptions(sponsoredCount);
+
+        fetchDownline(parseInt(levelSelect.value));
+      })();
+    </script>
+
+
+
+
+
+
+
+</body>
+
+</html>

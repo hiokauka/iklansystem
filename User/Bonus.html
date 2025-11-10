@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonus & Pengeluaran | AdSpace</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+   body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #1a093c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    flex-wrap: wrap;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #ffffff;
+    margin-top: 15px;
+    margin-left: 450px; /* Adjusted in media queries */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1050;
+    overflow-y: auto;
+}
+
+nav a {
+    font-size: 20px;
+    padding: 10px 0;
+    display: block;
+}
+
+/* Buttons */
+button {
+    padding: 5px 10px;
+    background-color: #1a093c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-navbar {
+    font-size: 24px;
+    background: none;
+    border: white solid 2px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Cards */
+.bonuscard {
+    background-color: #1a093c;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tfcard {
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+/* Forms */
+.withdraw-container,
+.filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.withdraw-container input,
+.filters input,
+.filters select {
+    width: 300px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+/* Tables */
+.table-responsive {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+th {
+    background-color: #0d6efd;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 1200px) {
+    .title {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .title {
+        font-size: 1.8rem;
+    }
+
+    nav a {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 5px 8px;
+    }
+
+    .withdraw-container input,
+    .filters input,
+    .filters select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.6rem;
+    }
+
+    .btn-navbar {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.4rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-navbar {
+        font-size: 18px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <script>
+    // Check if the user is logged in
+    const isLoggedIn = localStorage.getItem('userLoggedIn')
+    if (!isLoggedIn) {
+      // Redirect to login page if not logged in
+      window.location.href = '/index.html'
+    }
+  </script>
+
+  <header class="mb-4 p-3 shadow-sm  d-flex flex-column flex-md-row">
+
+    <button class="btn-navbar mt-3" id="toggleSidebar">☰</button>
+    <h1 class=" title"> Hub Pengiklanan Digital</h1>
+
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <button class="btn-close mb-3" id="closeSidebar"></button>
+    <nav class="d-flex flex-column my-4">
+      <a href="/User/Uhome.html" class="mb-2 text-decoration-none text-dark">Laman Utama</a>
+      <a href="/User/Bonus.html" class="mb-2 text-decoration-none text-dark">Bonus</a>
+      <a href="/User/Network.html" class="mb-2 text-decoration-none text-dark">Rangkaian</a>
+      <a href="/User/Profile.html" class="mb-2 text-decoration-none text-dark">Profile</a>
+      <a href="#" id="logoutLink" class="mb-2 text-decoration-none" style="color: red;">Log Keluar</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <!-- Bonus Card -->
+    <div class="bonuscard">
+      <h2>Total Bonus: <span id="bonusDisplay">Loading...</span></h2>
+    </div>
+
+    <!-- Withdraw Section -->
+    <div class="withdraw-container">
+      <input id="withdraw-amount" type="number" placeholder="Nyatakan jumlah yang ingin dikeluarkan" />
+      <button class="button">Pengeluaran (Caj Pengeluaran RM20)</button>
+    </div>
+
+
+    <!-- Filters -->
+    <div class="filters">
+      <input type="text" placeholder="Search by date, ID, amount..." />
+      <select>
+        <option value="">All Status</option>
+        <option value="completed">Completed</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="tfcard">
+      <div class="table-responsive">
+        <table class="table">
+          <colgroup>
+            <col style="width: 20%">
+            <col style="width: 15%">
+            <col style="width: 30%">
+            <col style="width: 35%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Tarikh</th>
+              <th>Id Transaksi</th>
+              <th>Status</th>
+              <th>Jumlah Pengeluaran</th>
+            </tr>
+          </thead>
+          <tbody>
+
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.style.display = 'block';
+    });
+    closeBtn.addEventListener('click', () => {
+      sidebar.style.display = 'none';
+    });
+  </script>
+
+  <script>
+    const logoutLink = document.getElementById('logoutLink');
+
+    logoutLink.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Show confirmation dialog
+      const confirmed = confirm("Adakah anda pasti mahu log keluar?");
+      if (!confirmed) return; // Stop if user cancels
+
+      // Clear localStorage login flags
+      localStorage.removeItem('userLoggedIn');
+      localStorage.removeItem('username');
+
+      // Redirect to login page
+      window.location.href = '/index.html';
+    });
+  </script>
+
+  <script type="module">
+    import { supabase } from "/supabase.js";
+
+    async function loadTransactions() {
+      const username = localStorage.getItem("username");
+      if (!username) return;
+
+      // Get user ID first
+      const { data: user, error: userError } = await supabase
+        .from("users")
+        .select("id")
+        .eq("username", username)
+        .single();
+
+      if (userError || !user) {
+        console.error("User fetch error:", userError);
+        return;
+      }
+
+      // Get transactions for this user
+      const { data: transactions, error: transError } = await supabase
+        .from("transactions")
+        .select("id, amount, action, status, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (transError) {
+        console.error("Transaction fetch error:", transError);
+        return;
+      }
+
+      const tbody = document.querySelector(".table tbody");
+      tbody.innerHTML = ""; // Clear existing rows
+
+      transactions.forEach(txn => {
+        const date = new Date(txn.created_at).toLocaleDateString("ms-MY");
+        const amount = `RM ${txn.amount.toFixed(2)}`;
+        const status = txn.status ? txn.status.charAt(0).toUpperCase() + txn.status.slice(1) : "-";
+
+        tbody.innerHTML += `
+      <tr>
+        <td>${date}</td>
+        <td>TXN${txn.id.toString().padStart(4, "0")}</td>
+        <td>${status}</td>
+        <td>${amount}</td>
+      </tr>
+    `;
+      });
+    }
+
+    // Load on page start
+    loadTransactions();
+  </script>
+
+
+  <script type="module">
+    import { supabase } from '/supabase.js';
+
+    // Get logged in user
+    const username = localStorage.getItem("username");
+
+    if (!username) {
+      window.location.href = "/index.html"; // Force login if not found
+    }
+
+    async function loadBonus() {
+      const { data, error } = await supabase
+        .from("users")
+        .select("bonus")
+        .eq("username", username)
+        .single();
+
+      if (error) {
+        console.error("Error fetching bonus:", error);
+        return;
+      }
+
+      // Update bonus card UI
+      const bonusAmount = Number(data.bonus).toFixed(2);
+      document.getElementById("bonusDisplay").innerText = `RM ${bonusAmount}`;
+    }
+
+    loadBonus();
+  </script>
+
+  <script type="module">
+    import { supabase } from '/supabase.js';
+
+    document.querySelector(".button").addEventListener("click", handleWithdraw);
+
+    async function handleWithdraw() {
+      const amountInput = document.querySelector(".withdraw-container input");
+      const withdrawAmount = parseFloat(amountInput.value);
+
+      const username = localStorage.getItem("username");
+      if (!username) return alert("Sila log masuk terlebih dahulu!");
+
+      if (!withdrawAmount || withdrawAmount <= 0) {
+        return alert("Sila masukkan jumlah pengeluaran yang sah!");
+      }
+
+    
+      // ✅ Fetch user data
+      const { data: user, error: userError } = await supabase
+        .from("users")
+        .select("id, name, bank_name, bank_num, bonus")
+        .eq("username", username)
+        .single();
+
+      if (userError || !user) {
+        console.error(userError);
+        return alert("Gagal mendapatkan maklumat pengguna.");
+      }
+
+      // ✅ Check if enough balance
+      if (withdrawAmount > user.bonus) {
+        return alert("Jumlah pengeluaran melebihi baki bonus anda!");
+      }
+
+      // ✅ Insert into transactions table (pending)
+      const { error: insertError } = await supabase
+        .from("transactions")
+        .insert({
+          user_id: user.id,
+          name: user.name,
+          bank_name: user.bank_name,
+          account_number: user.bank_num,
+          amount: withdrawAmount,
+          action: "withdrawal",
+          status: "pending"
+        });
+
+      if (insertError) {
+        console.error(insertError);
+        return alert("Gagal menghantar permohonan pengeluaran.");
+      }
+
+      // ✅ Deduct balance immediately
+      const newBalance = user.bonus - withdrawAmount;
+
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ bonus: newBalance })
+        .eq("id", user.id);
+
+      if (updateError) {
+        console.error(updateError);
+        return alert("Gagal mengemas kini baki bonus.");
+      }
+
+      alert("Permohonan pengeluaran berjaya dihantar!");
+      amountInput.value = "";
+      location.reload();
+    }
+
+  </script>
+
+
+</body>
+
+</html>
