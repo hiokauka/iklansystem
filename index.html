@@ -306,6 +306,8 @@ a:focus {
                 .select("*")
                 .order("created_at", { ascending: false });
 
+            console.log("Fetched ads:", ads, error);
+
             if (error) {
                 console.error("Error fetching ads:", error);
                 return;
