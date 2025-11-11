@@ -10,187 +10,192 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
-     body {
-    font-family: "Montserrat", sans-serif;
-    font-size: 18px;
-    background: #e5e1e1;
-    color: #222;
-    margin: 0;
-    padding: 0;
-}
+        body {
+            font-family: "Montserrat", sans-serif;
+            font-size: 18px;
+            background: #e5e1e1;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
 
-.main-content-home {
-    flex: 1; /* Pushes footer to bottom */
-}
+        .main-content-home {
+            flex: 1;
+            /* Pushes footer to bottom */
+        }
 
-header {
-    background: #1a093c;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-}
+        header {
+            background: #1a093c;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+        }
 
-footer {
-    background: #ffffff;
-}
+        footer {
+            background: #ffffff;
+        }
 
-.title {
-    font-weight: 700;
-    font-size: 2.2rem;
-    color: #ffffff;
-    margin-top: 15px;
-    margin-left: 450px; /* Will adjust in mobile */
-}
+        .title {
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-top: 15px;
+            margin-left: 450px;
+            /* Will adjust in mobile */
+        }
 
-/* Sidebar */
-.sidebar {
-    width: 260px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    background: white;
-    padding: 1.5rem;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    display: none;
-    z-index: 1050;
-    overflow-y: auto;
-}
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1050;
+            overflow-y: auto;
+        }
 
-nav a {
-    font-size: 20px;
-    padding: 10px 0;
-    display: block;
-}
+        nav a {
+            font-size: 20px;
+            padding: 10px 0;
+            display: block;
+        }
 
-/* Cards */
-.card {
-    border-radius: 12px;
-}
+        /* Cards */
+        .card {
+            border-radius: 12px;
+        }
 
-.card-body h5 {
-    font-size: 1.4rem;
-}
+        .card-body h5 {
+            font-size: 1.4rem;
+        }
 
-.btn {
-    font-size: 18px;
-    padding: 10px 16px; /* Larger tap area */
-}
+        .btn {
+            font-size: 18px;
+            padding: 10px 16px;
+            /* Larger tap area */
+        }
 
-.footer-text {
-    font-size: 17px;
-}
+        .footer-text {
+            font-size: 17px;
+        }
 
-/* Button row */
-.button-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: auto;
-    color: #001f4e;
-}
+        /* Button row */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: auto;
+            color: #001f4e;
+        }
 
-.btn-details {
-    background-color: #001638;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .btn-details {
+            background-color: #001638;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-button:focus,
-a:focus {
-    outline: 3px solid #0d6efd55;
-}
+        button:focus,
+        a:focus {
+            outline: 3px solid #0d6efd55;
+        }
 
-.ad-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
+        .ad-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
 
-.ad-card {
-    transition: all 0.3s ease;
-    border: #001638 solid 1px;
-}
+        .ad-card {
+            transition: all 0.3s ease;
+            border: #001638 solid 1px;
+        }
 
-.btn-navbar {
-    font-size: 24px;
-    background: none;
-    border: white solid 2px;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-}
+        .btn-navbar {
+            font-size: 24px;
+            background: none;
+            border: white solid 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+        }
 
-.card-img-top {
-    width: 100%;       /* full width of the card */
-    height: 200px;     /* fixed height */
-    object-fit: cover; /* maintain aspect ratio, crop if needed */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
+        .card-img-top {
+            width: 100%;
+            /* full width of the card */
+            height: 200px;
+            /* fixed height */
+            object-fit: cover;
+            /* maintain aspect ratio, crop if needed */
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
 
-/* ===== Responsive adjustments ===== */
-@media (max-width: 1024px) {
-    .title {
-        font-size: 2rem;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
+        /* ===== Responsive adjustments ===== */
+        @media (max-width: 1024px) {
+            .title {
+                font-size: 2rem;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
 
-    .btn-navbar {
-        font-size: 22px;
-    }
-}
+            .btn-navbar {
+                font-size: 22px;
+            }
+        }
 
-@media (max-width: 768px) {
-    .title {
-        font-size: 1.8rem;
-    }
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8rem;
+            }
 
-    .btn {
-        font-size: 16px;
-        padding: 8px 12px;
-    }
+            .btn {
+                font-size: 16px;
+                padding: 8px 12px;
+            }
 
-    .btn-details {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
+            .btn-details {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
 
-    .card-body h5 {
-        font-size: 1.2rem;
-    }
-}
+            .card-body h5 {
+                font-size: 1.2rem;
+            }
+        }
 
-@media (max-width: 480px) {
-    .title {
-        font-size: 1.5rem;
-    }
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.5rem;
+            }
 
-    .btn {
-        font-size: 14px;
-        padding: 6px 10px;
-    }
+            .btn {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
 
-    .btn-details {
-        font-size: 13px;
-        padding: 6px 10px;
-    }
+            .btn-details {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
 
-    nav a {
-        font-size: 16px;
-    }
-}
-
+            nav a {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 
@@ -315,31 +320,33 @@ a:focus {
 
             container.innerHTML = "";
 
+            let html = ""
+
             ads.forEach(ad => {
-                const card = `
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card h-100 ad-card shadow-sm">
-                <img src="${ad.image_url || '/assets/images/image.png'}" class="card-img-top" alt="${ad.title}" />
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">${ad.title}</h5>
-                    <p class="text-primary fw-bold">RM ${ad.price}</p>
-                    <div class="button-group">
-                        <button class="btn btn-primary mt-auto" 
-                                data-bs-toggle="modal" 
-                                data-bs-target="#adModal1"
-                                data-title="${ad.title}"
-                                data-description="${ad.description}"
-                                data-price="${ad.price}"
-                                data-image="${ad.image_url}">
-                            Lihat Butiran
-                        </button>
-                    </div>
+                html += `
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100 ad-card shadow-sm">
+            <img src="${ad.image_url || '/assets/images/image.png'}" class="card-img-top" alt="${ad.title}" />
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${ad.title}</h5>
+                <p class="text-primary fw-bold">RM ${ad.price}</p>
+                <div class="button-group">
+                    <button class="btn btn-primary mt-auto" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#adModal1"
+                            data-title="${ad.title}"
+                            data-description="${ad.description}"
+                            data-price="${ad.price}"
+                            data-image="${ad.image_url}">
+                        Lihat Butiran
+                    </button>
                 </div>
             </div>
         </div>
-        `;
-                container.innerHTML += card;
+    </div>
+    `;
             });
+            container.innerHTML = html;
 
             attachModalEvents();
         }
