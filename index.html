@@ -235,7 +235,7 @@
 
     </div>
     <!-- Ad Modal -->
-    <!-- <div class="modal fade" id="adModal1" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="adModal1" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -272,7 +272,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Footer -->
     <footer class="mt-5 text-center text-muted py-2">
@@ -318,7 +318,13 @@
                 return;
             }
 
-            container.innerHTML = "";
+            container.innerHTML = `
+  <div class="col-12">
+    <div class="card bg-warning text-dark p-3">
+      <h5>TEST CARD: Container works!</h5>
+    </div>
+  </div>
+`;
 
             let html = ""
 
