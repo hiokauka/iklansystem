@@ -326,33 +326,33 @@
   </div>
 `;
 
-            let html = ""
+    //         let html = ""
 
-            ads.forEach(ad => {
-                html += `
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100 ad-card shadow-sm">
-            <img src="${ad.image_url || '/assets/images/image.png'}" class="card-img-top" alt="${ad.title}" />
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">${ad.title}</h5>
-                <p class="text-primary fw-bold">RM ${ad.price}</p>
-                <div class="button-group">
-                    <button class="btn btn-primary mt-auto" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#adModal1"
-                            data-title="${ad.title}"
-                            data-description="${ad.description}"
-                            data-price="${ad.price}"
-                            data-image="${ad.image_url}">
-                        Lihat Butiran
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-            });
-            container.innerHTML = html;
+    //         ads.forEach(ad => {
+    //             html += `
+    // <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+    //     <div class="card h-100 ad-card shadow-sm">
+    //         <img src="${ad.image_url || '/assets/images/image.png'}" class="card-img-top" alt="${ad.title}" />
+    //         <div class="card-body d-flex flex-column">
+    //             <h5 class="card-title">${ad.title}</h5>
+    //             <p class="text-primary fw-bold">RM ${ad.price}</p>
+    //             <div class="button-group">
+    //                 <button class="btn btn-primary mt-auto" 
+    //                         data-bs-toggle="modal" 
+    //                         data-bs-target="#adModal1"
+    //                         data-title="${ad.title}"
+    //                         data-description="${ad.description}"
+    //                         data-price="${ad.price}"
+    //                         data-image="${ad.image_url}">
+    //                     Lihat Butiran
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </div>
+    // `;
+    //         });
+    //         container.innerHTML = html;
 
             attachModalEvents();
         }
