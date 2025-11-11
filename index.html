@@ -298,6 +298,7 @@ a:focus {
 
         async function loadAds() {
             const container = document.getElementById("adsContainer");
+            console.log("adsContainer:", container);
 
             // Fetch all ads
             const { data: ads, error } = await supabase
