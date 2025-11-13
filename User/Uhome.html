@@ -336,17 +336,16 @@
         function attachClickEvents() {
             document.querySelectorAll(".click-btn").forEach(btn => {
                 btn.addEventListener("click", async () => {
-
                     const username = localStorage.getItem("username");
                     if (!username) {
                         window.location.href = "/index.html";
                         return;
                     }
 
-                    // 1. Fetch user click + bonus info
+                    // 1️⃣ Fetch user info including created_at
                     const { data: user, error: fetchErr } = await supabase
                         .from("users")
-                        .select("click_count, daily_click_count, last_click_date, bonus, click_bonus, maximumclickperday")
+                        .select("click_count, daily_click_count, last_click_date, bonus, click_bonus, maximumclickperday, created_at")
                         .eq("username", username)
                         .single();
 
@@ -355,43 +354,57 @@
                         return;
                     }
 
-                    const today = new Date().toISOString().split("T")[0];
-                    let dailyClicks = user.daily_click_count || 0;
-                    let max = parseInt(user.maximumclickperday, 10) || 0;
+                    // 2️⃣ Calculate how many days since user joined
+                    const createdAt = new Date(user.created_at);
+                    const today = new Date();
+                    const daysSinceJoin = Math.floor((today - createdAt) / (1000 * 60 * 60 * 24));
 
-                    // Reset daily count if it's a new day
-                    if ((user.last_click_date?.split("T")[0] || null) !== today) {
-                        dailyClicks = 0;
-                    }
+                    
 
-                    // 🚫 Check total earned money limit
-                    if ((user.click_bonus || 0) >= 120) {
-                        alert("🚫 You have reached the maximum earning from clicks (RM 120). Cannot click anymore.");
+                    if (daysSinceJoin >= 40) {
+                        alert("🚫 You have reached the 40-day earning period. Clicking is no longer available.");
                         btn.disabled = true;
                         return;
                     }
 
-                    // Check daily limit
+                    // 3️⃣ Daily click reset logic
+                    const todayDateStr = today.toISOString().split("T")[0];
+                    let dailyClicks = user.daily_click_count || 0;
+                    const max = parseInt(user.maximumclickperday, 10) || 3;
+
+                    if ((user.last_click_date?.split("T")[0] || null) !== todayDateStr) {
+                        dailyClicks = 0; // Reset daily count
+                    }
+
+                    // 4️⃣ Total earnings check
+                    if ((user.click_bonus || 0) >= 111) {
+                        alert("🚫 You have reached the maximum earning limit (RM 111). Cannot click anymore.");
+                        btn.disabled = true;
+                        return;
+                    }
+
+                    // 5️⃣ Check daily click limit
                     if (dailyClicks >= max) {
                         alert(`🚫 You reached your daily click limit of ${max}. Try again tomorrow.`);
                         return;
                     }
 
-                    // Calculate new values
+                    // 6️⃣ Compute new values
                     const newTotalClicks = (user.click_count || 0) + 1;
                     const newDailyClicks = dailyClicks + 1;
                     const earnedFromClick = 1; // RM per click
                     const newClickBonus = (user.click_bonus || 0) + earnedFromClick;
-                    const newTotalBonus = (user.bonus || 0) + earnedFromClick; // total includes clicks + MLM
-                    // Update DB
+                    const newTotalBonus = (user.bonus || 0) + earnedFromClick;
+
+                    // 7️⃣ Update Supabase
                     const { error: updateErr } = await supabase
                         .from("users")
                         .update({
                             click_count: newTotalClicks,
                             daily_click_count: newDailyClicks,
-                            last_click_date: today,
-                            bonus: newTotalBonus,      // total including click + MLM
-                            click_bonus: newClickBonus  // click-specific bonus
+                            last_click_date: todayDateStr,
+                            bonus: newTotalBonus,
+                            click_bonus: newClickBonus
                         })
                         .eq("username", username);
 
@@ -399,13 +412,8 @@
                         console.error("Failed to update:", updateErr);
                     } else {
                         alert(`✅ Berjaya! Klik hari ini: ${newDailyClicks}/${max}, Total bonus: RM ${newTotalBonus}`);
-
-                        // Disable button if total bonus reached 120
-                        if (newBonus >= 120) {
-                            btn.disabled = true;
-                        }
+                        if (newClickBonus >= 120) btn.disabled = true;
                     }
-
                 });
             });
         }
