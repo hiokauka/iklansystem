@@ -431,7 +431,7 @@
         return alert("Gagal mendapatkan maklumat pengguna.");
       }
 
-      const totalDeduction = withdrawAmount + fee;
+      const totalDeduction = withdrawAmount;
 
       // ✅ Check if enough balance
       if (totalDeduction > user.bonus) {
@@ -446,7 +446,7 @@
           name: user.name,
           bank_name: user.bank_name,
           account_number: user.bank_num,
-          amount: withdrawAmount,
+          amount: withdrawAmount - fee,
           action: "withdrawal",
           status: "pending",
           fee: fee
