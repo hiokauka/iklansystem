@@ -293,136 +293,184 @@
     });
   </script>
 
-    <script type="module">
-      import { supabase } from '/supabase.js';
+  <script type="module">
+    import { supabase } from '/supabase.js';
 
-      const levelRequirements = [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8];
-      const levelBonuses = [0, 3, 2, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5];
+    const levelRequirements = [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8];
+    const levelBonuses = [0, 3, 2, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5];
 
-      const userTableBody = document.querySelector('table tbody');
-      const levelSelect = document.getElementById('level');
+    const userTableBody = document.querySelector('table tbody');
+    const levelSelect = document.getElementById('level');
 
-      let sponsoredCount = 0;
+    let sponsoredCount = 0;
 
-      const fetchDownline = async (requestedLevel) => {
-        const loggedInUser = localStorage.getItem("username");
-        if (!loggedInUser) return;
+    const fetchDownline = async (requestedLevel) => {
+      const loggedInUser = localStorage.getItem("username");
+      if (!loggedInUser) return;
 
-        userTableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+      userTableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
 
-        // Fetch logged-in user
-        const { data: user, error: userError } = await supabase
+      // Fetch logged-in user info
+      const { data: user, error: userError } = await supabase
+        .from("users")
+        .select("pin, name, bonus, bonus_levels")
+        .eq("username", loggedInUser)
+        .single();
+
+      if (userError || !user) {
+        console.error("Error fetching user:", userError);
+        userTableBody.innerHTML = '<tr><td colspan="5">Error loading data</td></tr>';
+        return;
+      }
+
+      const userBonusLevels = user.bonus_levels || {}; // {1: 3, 2: 0}
+
+      // Count direct sponsors using PIN referral
+      const { data: sponsoredUsers } = await supabase
+        .from("users")
+        .select("username, pin")
+        .eq("referral", user.pin);
+
+      sponsoredCount = sponsoredUsers?.length || 0;
+      updateLevelOptions(sponsoredCount);
+
+      if (sponsoredCount === 0) {
+        userTableBody.innerHTML = '<tr><td colspan="5">Not enough sponsored users for any level</td></tr>';
+        return;
+      }
+
+      // Initialize
+      let currentLevelPins = [user.pin];
+      const downlinesByLevel = {}; // save users per level for display
+      let totalBonusThisFetch = 0;
+
+      for (let level = 1; level <= sponsoredCount; level++) {
+        if (currentLevelPins.length === 0) break;
+
+        const { data: levelUsers, error } = await supabase
           .from("users")
-          .select("pin, name, bonus, bonus_levels")
-          .eq("username", loggedInUser)
-          .single();
+          .select("pin, name, username, number_telephone, created_at")
+          .in("referral", currentLevelPins);
 
-        if (userError || !user) {
-          console.error("Error fetching user:", userError);
-          userTableBody.innerHTML = '<tr><td colspan="5">Error loading data</td></tr>';
-          return;
+        if (error) {
+          console.error("Error fetching downline for level", level, error);
+          break;
         }
 
-        // Count direct sponsors
-        const { data: sponsoredUsers } = await supabase
+        if (!levelUsers || levelUsers.length === 0) {
+          console.log(`Level ${level}: No downline`);
+          currentLevelPins = [];
+          continue;
+        }
+
+        console.log(`Level ${level}: ${levelUsers.length} users`);
+
+        // Save downline for this level
+        downlinesByLevel[level] = levelUsers;
+
+        // Calculate bonus for NEW users only
+        const lastCount = userBonusLevels[level] || 0;
+        const newUsers = levelUsers.length - lastCount;
+
+        if (newUsers > 0) {
+          const bonusThisLevel = levelBonuses[level] * newUsers;
+          totalBonusThisFetch += bonusThisLevel;
+
+          console.log(`Level ${level} new users: ${newUsers}`);
+          console.log(`Level ${level} bonus per user: ${levelBonuses[level]}`);
+          console.log(`Level ${level} total bonus added: ${bonusThisLevel}`);
+
+          // Update processed count for this level
+          userBonusLevels[level] = levelUsers.length;
+        } else {
+          console.log(`Level ${level}: all users already rewarded. Skipping bonus.`);
+        }
+
+        // Prepare pins for next level
+        currentLevelPins = levelUsers.map(u => u.pin);
+      }
+
+      // Update total bonus in DB if any
+      if (totalBonusThisFetch > 0) {
+        const newBonus = (parseFloat(user.bonus) || 0) + totalBonusThisFetch;
+        const { error: updateError } = await supabase
           .from("users")
-          .select("username, pin")
-          .eq("referral", user.pin);
+          .update({
+            bonus: newBonus,
+            bonus_levels: userBonusLevels
+          })
+          .eq("pin", user.pin);
 
-        sponsoredCount = sponsoredUsers?.length || 0;
-        updateLevelOptions(sponsoredCount);
+        if (updateError) console.error("Error updating bonus:", updateError);
+        else console.log(`BONUS UPDATE SUCCESSFUL. Total added: ${totalBonusThisFetch}`);
+      } else {
+        console.log("No new bonus to add.");
+      }
 
-        const maxLevel = Math.min(requestedLevel, sponsoredCount);
-        if (maxLevel === 0) {
-          userTableBody.innerHTML = '<tr><td colspan="5">Not enough sponsored users for any level</td></tr>';
-          return;
-        }
+      // Render table for the selected level only
+      renderTable(downlinesByLevel[requestedLevel] || [], requestedLevel, user);
+    };
 
-        let currentLevelPins = [user.pin];
-        let downline = [];
+    const renderTable = (downline, level, user) => {
+      if (!downline || downline.length === 0) {
+        userTableBody.innerHTML = '<tr><td colspan="5">No downline found</td></tr>';
+        return;
+      }
 
-        for (let i = 0; i < maxLevel; i++) {
-          if (currentLevelPins.length === 0) break;
+      const bonus = levelBonuses[level] || 0;
 
-          const { data, error } = await supabase
-            .from("users")
-            .select("name, username, number_telephone, created_at, pin")
-            .in("referral", currentLevelPins);
+      userTableBody.innerHTML = downline.map(u => `
+    <tr>
+      <td>${u.name}</td>
+      <td>${u.username}</td>
+      <td>${u.number_telephone || '-'}</td>
+      <td>${new Date(u.created_at).toLocaleDateString()}</td>
+      <td>${bonus}</td>
+    </tr>
+  `).join('');
+    };
 
-          if (error || !data || data.length === 0) {
-            downline = [];
-            break;
-          }
-
-          downline = data;
-          currentLevelPins = downline.map(u => u.pin);
-        }
-
-        // Give bonus to the logged-in user (the referrer) **once per level**
-        const userBonusLevels = user.bonus_levels || {};
-        if (!userBonusLevels[maxLevel]) {
-          const newBonus = (parseFloat(user.bonus) || 0) + levelBonuses[maxLevel];
-          userBonusLevels[maxLevel] = true;
-
-          await supabase
-            .from("users")
-            .update({ bonus: newBonus, bonus_levels: userBonusLevels })
-            .eq("pin", user.pin);
-        }
-
-        renderTable(downline, maxLevel, user);
-      };
-
-      const renderTable = (downline, level, user) => {
-        if (!downline || downline.length === 0) {
-          userTableBody.innerHTML = '<tr><td colspan="5">No downline found</td></tr>';
-          return;
-        }
-
-        const bonus = levelBonuses[level] || 0;
-
-        userTableBody.innerHTML = downline.map(u => `
-      <tr>
-        <td>${u.name}</td>
-        <td>${u.username}</td>
-        <td>${u.number_telephone || '-'}</td>
-        <td>${new Date(u.created_at).toLocaleDateString()}</td>
-        <td>${bonus}</td>
-      </tr>
-    `).join('');
-      };
-
-      const updateLevelOptions = (sCount) => {
-        Array.from(levelSelect.options).forEach(option => {
-          const level = parseInt(option.value);
-          option.disabled = level > sCount;
-        });
-
-        if (parseInt(levelSelect.value) > sCount) {
-          levelSelect.value = sCount > 0 ? sCount : 1;
-        }
-      };
-
-      levelSelect.addEventListener('change', () => {
-        fetchDownline(parseInt(levelSelect.value));
+    const updateLevelOptions = (sCount) => {
+      Array.from(levelSelect.options).forEach(option => {
+        const level = parseInt(option.value);
+        option.disabled = level > sCount;
       });
 
-      // Initial load
-      (async () => {
-        const loggedInUser = localStorage.getItem("username");
-        if (!loggedInUser) return;
+      if (parseInt(levelSelect.value) > sCount) {
+        levelSelect.value = sCount > 0 ? sCount : 1;
+      }
+    };
 
-        const { data: sponsoredUsers } = await supabase
-          .from("users")
-          .select("username, pin")
-          .eq("referral", loggedInUser);
+    levelSelect.addEventListener('change', () => {
+      fetchDownline(parseInt(levelSelect.value));
+    });
 
-        sponsoredCount = sponsoredUsers?.length || 0;
-        updateLevelOptions(sponsoredCount);
+    // Initial load
+    (async () => {
+      const loggedInUser = localStorage.getItem("username");
+      if (!loggedInUser) return;
 
-        fetchDownline(parseInt(levelSelect.value));
-      })();
-    </script>
+      const { data: userData } = await supabase
+        .from("users")
+        .select("pin")
+        .eq("username", loggedInUser)
+        .single();
+
+      if (!userData) return;
+
+      const { data: sponsoredUsers } = await supabase
+        .from("users")
+        .select("username, pin")
+        .eq("referral", userData.pin);
+
+      sponsoredCount = sponsoredUsers?.length || 0;
+      updateLevelOptions(sponsoredCount);
+
+      fetchDownline(parseInt(levelSelect.value));
+    })();
+  </script>
+
+
 
 
 
